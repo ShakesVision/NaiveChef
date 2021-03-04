@@ -1,0 +1,30 @@
+.recipe-details{
+    background-color: rgb(255, 254, 188);
+ }  
+ .recipe-ingredients-count, .recipe-time, .recipe-servings{
+     text-align: center;
+ }
+ .recipe-ingredients-count div, .recipe-time div, .recipe-servings div{
+     font-size: 2.5rem;
+     text-align: center;
+     font-weight: bold;      
+ }
+ 
+  .banner {
+    height: 300px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+    color:white;
+    text-transform: uppercase;
+    text-shadow: 5px 2px 3px gray;    
+    font-size:xx-large;
+  }
+  .banner span.bannertxt {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 300px;
+    letter-spacing: 1px;
+  }

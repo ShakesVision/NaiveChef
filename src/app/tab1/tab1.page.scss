@@ -1,0 +1,23 @@
+.welcome-card img {
+  max-height: 35vh;
+  overflow: hidden;
+}
+// http://ezzylearning.com/tutorial/building-a-food-recipes-mobile-app-with-ionic-3x-and-angular-5-part-4
+.recipe-name{
+  // color: var(--ion-color-primary);
+  font-weight: bold;
+  font-size: 14pt;
+}
+.cooking-time{
+  // color: var(--ion-color-primary);
+  font-size: 10pt;
+  font-weight: bold;
+  display:inline;
+}
+.cooking-time-value{
+  // color: color(dark);
+  font-size: 10pt;
+}
+ion-radio {
+  padding: 5px 5px 0 0;
+}

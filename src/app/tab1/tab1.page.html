@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Recipes
+    </ion-title>
+    <ion-button slot="end" routerLink="/signup">Signup</ion-button>
+    <ion-button slot="end" routerLink="/login">LOgin</ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header (click)="toggle_visibility()" id="accord">
+      <ion-card-subtitle>
+        <div>
+          <ion-icon slot="start" name="settings" style="margin: 0 10px 0 10px;"></ion-icon>
+          Sort/Search by
+        </div>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content class="ion-padding" id="accord-content" style="display:none;">
+      <ion-radio-group [(ngModel)]="isChecked" (click)="sortList()">
+        <ion-radio value="title" checked="true"></ion-radio>
+        <ion-label>Title</ion-label> <br>
+        <ion-radio value="time"></ion-radio>
+        <ion-label>Time required</ion-label> <br>
+        <ion-radio value="serves"></ion-radio>
+        <ion-label>Number of servings</ion-label> <br>
+        <ion-radio value="ingredients"></ion-radio>
+        <ion-label>Ingredients (search)</ion-label> <br>
+        <ion-radio value="instructions"></ion-radio>
+        <ion-label>Instructions (search)</ion-label> <br>
+      </ion-radio-group>
+      <ion-list>
+        <ion-list-header>
+          Time
+          <!-- <ion-badge slot="end" color="dark">{{ionrange1.lower}}</ion-badge>
+          <ion-badge slot="end" color="dark">{{ionrange1.upper}}</ion-badge> -->
+        </ion-list-header>
+        <ion-item>
+          <ion-range (ionChange)="timeRangeFilter()" [(ngModel)]="ionrange1" pin="true" ticks="true" dualKnobs="true"
+            [min]="minTime" [max]="maxTime" step="1" snaps="true">
+            <ion-label slot="start">{{minTime}}</ion-label>
+            <ion-label slot="end">{{maxTime}}</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <ion-list-header>
+          Serves
+          <!-- <ion-badge slot="end" color="dark">{{ionrange2.lower}}</ion-badge>
+          <ion-badge slot="end" color="dark">{{ionrange2.upper}}</ion-badge> -->
+        </ion-list-header>
+        <ion-item>
+          <ion-range (ionChange)="servingRangeFilter()" [(ngModel)]="ionrange2" pin="true" ticks="true" dualKnobs="true"
+            [min]="minServings" [max]="maxServings" step="1" snaps="true">
+            <ion-label slot="start">{{minServings}}</ion-label>
+            <ion-label slot="end">{{maxServings}}</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-list>
+      <!-- <ion-radio-group (click)="filterDifficulty()" [(ngModel)]="diffSelect" placeholder="Select level of difficulty" value="Easy" okText="OK" cancelText="CANCEL" [(ngModel)]="difficultySort">
+        <ion-radio value="Easy"> Easy </ion-radio>
+        <ion-radio value="Medium"> Medium </ion-radio>
+        <ion-radio value="Hard"> Hard </ion-radio>
+      </ion-radio-group> -->
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-searchbar placeholder="Search..." showcancelbutton="" (input)="filterList($event)"></ion-searchbar>
+
+  <!-- <ion-item *ngFor="let item of items" [routerLink]="['/details', item.payload.doc.id]">                                                       -->
+  <!-- <ion-item-options side="start">
+                          <ion-item-option color="tertiary" expandable>
+                            <ion-icon name="create"></ion-icon>
+                            Edit
+                          </ion-item-option>
+                        </ion-item-options>
+                      </ion-item-sliding>               -->
+  <ion-list>
+    <ion-label style="text-align: center;color: grey;" class="ion-padding" *ngIf="items?.length == 0">No recipes to
+      show...</ion-label>
+    <ion-item *ngFor="let item of items">
+      <ion-label>{{item.payload.doc.data()?.title}}</ion-label>
+      <ion-label style="text-align: center;">{{item.payload.doc.data().time}} <br> <span
+          style="font-size: x-small;text-align: center;">minutes</span></ion-label>
+
+      <ion-button fill="clear" (click)="gotoDetails(item)">Details</ion-button>
+      <span *ngIf="isLoggedin">
+      <ion-button (click)="delete(item.payload.doc.id)" color="danger">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+      <ion-button (click)="edit(item)" color="secondary">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+    </span>
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngIf="isLoggedin">
+    <ion-card-header>
+      <ion-card-title>Recipe Editor</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input [(ngModel)]="title" placeholder="Title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="time" type="number" placeholder="Time"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="serves" type="number" placeholder="Serves"></ion-input>
+      </ion-item>
+
+      <ion-select okText="OK" cancelText="CANCEL" [(ngModel)]="difficulty" value="Easy"
+        placeholder="Select level of Difficulty">
+        <ion-select-option value="Easy"> Easy </ion-select-option>
+        <ion-select-option value="Medium"> Medium </ion-select-option>
+        <ion-select-option value="Hard"> Hard </ion-select-option>
+      </ion-select>
+
+      <ion-item>
+        <ion-input [(ngModel)]="ingredients" placeholder="Ingredients (comma separated)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea [(ngModel)]="instructions" placeholder="Instructions"></ion-textarea>
+      </ion-item>
+      <br>
+
+      <ion-button expand="full" (click)="Add()">
+        <ion-icon slot="start" name="add-circle"></ion-icon> Add
+      </ion-button>
+      <ion-button expand="full" (click)="update(itemIdForUpdate)">
+        <ion-icon slot="start" name="checkmark"></ion-icon> Update
+      </ion-button>
+      <ion-button expand="full" (click)="resetFields()">
+        <ion-icon slot="start" name="return-left"></ion-icon> Clear Fields
+      </ion-button>
+    </ion-card-content>
+
+
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        Database Statistics
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <span class="cooking-time">Total entries:</span>
+      <span class="cooking-time-value">{{totalItems}}</span> <br>
+      <span class="cooking-time">Unique ingredients:</span>
+      <span class="cooking-time-value">{{ingCount}}</span> <br>
+      <div id="uniqueIng"></div>
+      <!-- <span class="cooking-time">Easy recipes:</span>
+      <span class="cooking-time-value">{{easy}}</span> -->
+    </ion-card-content>
+  </ion-card>
+
+  <!--     <ion-list>        
+    
+        <ion-item *ngFor="let recipe of items">        
+    
+          <h2 class="recipe-name">{{recipe.payload.doc.data().title}}</h2>
+          <span class="cooking-time">Cooking Time:</span> 
+    
+          <span class="cooking-time-value">{{recipe.payload.doc.data().time}} min</span>
+    
+        </ion-item>
+      </ion-list>
+ -->
+</ion-content>

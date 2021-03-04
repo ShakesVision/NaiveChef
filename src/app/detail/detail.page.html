@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ recipe.title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <img src="{{recipe.largeImageUrl}}" /> -->
+  <div class="banner"> <span class="bannertxt">{{recipe.difficulty}}</span> </div>
+  <div class="recipe-details">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="recipe-ingredients-count">
+            <ion-icon name="pint"></ion-icon>
+            <div>{{ingCount}}</div>
+            INGREDIENTS
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="recipe-servings">
+            <ion-icon name="contacts"></ion-icon>
+            <div>{{recipe.serves}}</div>
+            SERVES
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="recipe-time">
+            <ion-icon name="time"></ion-icon>
+            <div>{{recipe.time}}</div>
+            MINUTES
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
+  <div class="ion-padding">
+    <h1>Ingredients</h1>
+    <ion-list>
+      <ion-item button *ngFor="let ingredient of recipe.ingredients">
+        <ion-icon name="cafe" slot="start"></ion-icon>
+        {{ingredient}}
+      </ion-item>
+    </ion-list>
+  </div>
+  <div class="ion-padding">
+    <h1>Instructions</h1>
+    <ol class="steps"><span id="instrn"></span></ol>
+  </div>
+</ion-content>
